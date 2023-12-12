@@ -16,6 +16,7 @@ export default function (eruda: any) {
     init($el: any, container: any) {
       super.init($el, container)
       this._container = container
+
       this._initTpl()
 
       this._requestDataGrid = new LunaDataGrid(this._$requests.get(0), {
@@ -23,15 +24,18 @@ export default function (eruda: any) {
           {
             id: 't',
             title: 'Type',
+            weight: 20,
           },
           {
             id: 'n',
             title: 'EventId',
+            weight: 40,
           },
           {
             id: '_tm',
             title: 'Time',
             sortable: true,
+            weight: 40,
           },
         ],
       })
@@ -50,6 +54,7 @@ export default function (eruda: any) {
 
     destroy() {
       super.destroy()
+      window.navigator.sendBeacon = this._sendBeacon
       this._resizeSensor.destroy()
     }
 
