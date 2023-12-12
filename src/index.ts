@@ -3,6 +3,7 @@ import LunaDataGrid from 'luna-data-grid'
 import throttle from 'licia/throttle'
 import ResizeSensor from 'licia/ResizeSensor'
 import dateFormat from 'licia/dateFormat'
+import copy from 'licia/copy'
 
 const HOST = 'api.growingio.com'
 
@@ -48,6 +49,11 @@ export default function (eruda: any) {
       this._updateDataGridHeight()
     }
 
+    clear() {
+      this._requests = {}
+      this._requestDataGrid.clear()
+    }
+
     hide() {
       super.hide()
     }
@@ -68,9 +74,16 @@ export default function (eruda: any) {
 
     _initTpl() {
       const $el = this._$el
+      // <span class="eruda-icon-filter eruda-filter"></span>
       $el.html(
         `<div class="eruda-network">
-          <div class="eruda-control">
+          <div class="eruda-control" style="display: flex; height: 40px; padding: 10px; line-height: 20px; gap: 5px; font-size: 16px;">
+            <span class="eruda-icon-record eruda-record eruda-recording"></span>
+            <span class="eruda-icon-clear eruda-clear-request"></span>
+            <div style="flex: 1;"></div>
+            <span class="eruda-icon-eye eruda-icon-disabled eruda-show-detail"></span>
+            <span class="eruda-icon-copy eruda-icon-disabled eruda-copy-curl"></span>
+            <span class="eruda-filter-text"></span>
           </div>
           <div class="eruda-requests"></div>
         </div>
@@ -80,7 +93,48 @@ export default function (eruda: any) {
       this._$control = $el.find('.eruda-control')
     }
 
+    _updateButtons() {
+      const $control = this._$control
+      const $showDetail = $control.find('.eruda-show-detail')
+      const $copyCurl = $control.find('.eruda-copy-curl')
+      const iconDisabled = 'eruda-icon-disabled'
+
+      $showDetail.addClass(iconDisabled)
+      $copyCurl.addClass(iconDisabled)
+
+      if (this._selectedRequest) {
+        $showDetail.rmClass(iconDisabled)
+        $copyCurl.rmClass(iconDisabled)
+      }
+    }
+
+    _copy = () => {
+      copy(JSON.stringify(this._selectedRequest))
+      this._container.notify('已复制')
+    }
+
     _bindEvent() {
+      const $control = this._$control
+
+      $control
+        .on('click', '.eruda-clear-request', () => this.clear())
+        .on('click', '.eruda-show-detail', () => { this._container.notify('开发中...') })
+        .on('click', '.eruda-copy-curl', () => this._copy())
+        .on('click', '.eruda-record', () => { this._container.notify('开发中...') })
+
+      const requestDataGrid = this._requestDataGrid
+
+      requestDataGrid.on('select', (node: any) => {
+        this._selectedRequest = node.data
+        this._updateButtons()
+      })
+
+      requestDataGrid.on('deselect', () => {
+        // this._detail.hide()
+        this._selectedRequest = null
+        this._updateButtons()
+      })
+
       this._resizeSensor.addListener(
         throttle(() => this._updateDataGridHeight(), 15),
       )
@@ -113,10 +167,13 @@ export default function (eruda: any) {
 
       if (data?.t !== 'cstm')
         return
-      this._requestDataGrid.append({
-        ...data,
-        _tm: dateFormat(new Date(data.tm), 'isoTime'),
-      }, { selectable: true })
+      this._requestDataGrid.append(
+        {
+          ...data,
+          _tm: dateFormat(new Date(data.tm), 'isoTime'),
+        },
+        { selectable: true },
+      )
     }
   }
 
