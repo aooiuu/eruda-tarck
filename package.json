@@ -1,0 +1,65 @@
+{
+  "name": "eruda-track",
+  "type": "module",
+  "version": "0.0.1",
+  "packageManager": "pnpm@8.6.5",
+  "description": "",
+  "license": "MIT",
+  "author": "aooiuu",
+  "homepage": "https://github.com/aooiuu/eruda-track#readme",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/aooiuu/eruda-track"
+  },
+  "bugs": {
+    "url": "https://github.com/aooiuu/eruda-track/issues"
+  },
+  "keywords": [
+    "gio"
+  ],
+  "sideEffects": false,
+  "exports": {
+    ".": {
+      "types": "./index.d.ts",
+      "require": "./dist/index.cjs",
+      "import": "./dist/index.mjs"
+    }
+  },
+  "main": "dist/index.cjs",
+  "module": "dist/index.mjs",
+  "types": "index.d.ts",
+  "files": [
+    "dist",
+    "*.d.ts"
+  ],
+  "scripts": {
+    "build": "rollup -c",
+    "dev": "nr build --watch",
+    "lint": "eslint .",
+    "prepublishOnly": "npm run build",
+    "start": "esno src/index.ts",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest"
+  },
+  "devDependencies": {
+    "@antfu/eslint-config": "^0.39.6",
+    "@rollup/plugin-alias": "^5.0.0",
+    "@rollup/plugin-commonjs": "^25.0.2",
+    "@rollup/plugin-json": "^6.0.0",
+    "@rollup/plugin-node-resolve": "^15.1.0",
+    "@types/node": "^18.16.19",
+    "eslint": "^8.44.0",
+    "esno": "^0.16.3",
+    "rollup": "^3.26.0",
+    "rollup-plugin-dts": "^5.3.0",
+    "rollup-plugin-esbuild": "^5.0.0",
+    "typescript": "^5.1.6",
+    "vite": "^4.3.9",
+    "vitest": "^0.32.2"
+  },
+  "dependencies": {
+    "licia": "^1.39.1",
+    "luna-data-grid": "^0.6.0",
+    "lz-string": "^1.5.0"
+  }
+}
