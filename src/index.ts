@@ -4,6 +4,7 @@ import throttle from 'licia/throttle'
 import ResizeSensor from 'licia/ResizeSensor'
 import dateFormat from 'licia/dateFormat'
 import copy from 'licia/copy'
+import Detail from './Detail'
 
 const HOST = 'api.growingio.com'
 
@@ -19,6 +20,7 @@ export default function (eruda: any) {
       this._container = container
 
       this._initTpl()
+      this._detail = new Detail($el.find('.eruda-detail').get(0))
 
       this._requestDataGrid = new LunaDataGrid(this._$requests.get(0), {
         columns: [
@@ -76,18 +78,21 @@ export default function (eruda: any) {
       const $el = this._$el
       // <span class="eruda-icon-filter eruda-filter"></span>
       $el.html(
-        `<div class="eruda-network">
-          <div class="eruda-control" style="display: flex; height: 40px; padding: 10px; line-height: 20px; gap: 5px; font-size: 16px;">
-            <span class="eruda-icon-record eruda-record eruda-recording"></span>
-            <span class="eruda-icon-clear eruda-clear-request"></span>
-            <div style="flex: 1;"></div>
-            <span class="eruda-icon-eye eruda-icon-disabled eruda-show-detail"></span>
-            <span class="eruda-icon-copy eruda-icon-disabled eruda-copy-curl"></span>
-            <span class="eruda-filter-text"></span>
+        `<div class="eruda-track" style="width:100%; height: 100%;">
+          <div class="eruda-network">
+            <div class="eruda-control" style="display: flex; height: 40px; padding: 10px; line-height: 20px; gap: 5px; font-size: 16px; background: #f3f3f3">
+              <span class="eruda-icon-record eruda-record eruda-recording" style="color: #f20"></span>
+              <span class="eruda-icon-clear eruda-clear-request"></span>
+              <div style="flex: 1;"></div>
+              <span class="eruda-icon-eye eruda-icon-disabled eruda-show-detail"></span>
+              <span class="eruda-icon-copy eruda-icon-disabled eruda-copy-curl"></span>
+              <span class="eruda-filter-text"></span>
+            </div>
+            <div class="eruda-requests"></div>
           </div>
-          <div class="eruda-requests"></div>
+          <div class="eruda-detail"></div>
         </div>
-        <div class="eruda-detail"></div>`,
+        `,
       )
       this._$requests = $el.find('.eruda-requests')
       this._$control = $el.find('.eruda-control')
@@ -118,9 +123,8 @@ export default function (eruda: any) {
 
       $control
         .on('click', '.eruda-clear-request', () => this.clear())
-        .on('click', '.eruda-show-detail', () => { this._container.notify('开发中...') })
+        .on('click', '.eruda-show-detail', () => { this._detail.show(this._selectedRequest) })
         .on('click', '.eruda-copy-curl', () => this._copy())
-        .on('click', '.eruda-record', () => { this._container.notify('开发中...') })
 
       const requestDataGrid = this._requestDataGrid
 

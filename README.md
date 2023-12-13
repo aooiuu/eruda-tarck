@@ -4,7 +4,11 @@
 [![bundle][bundle-src]][bundle-href]
 [![JSDocs][jsdocs-src]][jsdocs-href]
 
-Eruda 埋点插件
+类似浏览器插件 [GrowingIO Web Debugger](https://docs.growingio.com/v3/developer-manual/debugging/web-debugger) 的 Eruda 埋点插件, 通过拦截 `window.navigator.sendBeacon` 实现埋点请求记录。
+
+
+![1](https://github.com/aooiuu/eruda-track/assets/28108111/022bb3b1-5959-4cd6-8ac2-76d1acef41dd)
+![2](https://github.com/aooiuu/eruda-track/assets/28108111/abb4a953-71f9-4022-bfb9-61550fc2e0f3)
 
 ## Usage
 

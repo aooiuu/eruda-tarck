@@ -1,7 +1,7 @@
 {
   "name": "eruda-track",
   "type": "module",
-  "version": "0.0.3",
+  "version": "0.1.0",
   "packageManager": "pnpm@8.6.5",
   "description": "",
   "license": "MIT",
